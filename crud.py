@@ -41,3 +41,34 @@ def add_tag(db: Session, tag, blog_id):
 def get_tag_by_blog_id(db: Session, blog_id):
     tags = db.query(Tag).filter(Tag.blog_id == blog_id).all()
     return [tag.name for tag in tags]
+
+
+def update_blog(
+    db: Session, 
+    blog_id: int,
+    title: str | None = None,
+    content: str | None = None,
+    category: str | None = None,
+    ):
+    blog = db.query(Blog).filter(Blog.id == blog_id).first()
+    
+    if not blog:
+        return False
+    
+    if title:
+        blog.title = title
+    if content:
+        blog.content = content
+        
+    if category:
+        blog.category = category
+        
+    db.commit()
+    db.refresh(blog)
+    return {
+        "id": blog.id,
+        "title": blog.title,
+        "content": blog.content,
+        "category": blog.category,
+        "tags": get_tag_by_blog_id(db, blog.id),
+    }

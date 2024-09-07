@@ -6,7 +6,13 @@ class Base(BaseModel):
     title: str
     category: str
     content: str
-    tags: List[str]
+    tags: List[str | None]
+    
+class UpdateBlog(BaseModel):
+    title: str | None = None
+    category: str | None = None
+    content: str | None = None
+    tags: List[str | None] = []
 
 class CreateBlog(Base):
     pass

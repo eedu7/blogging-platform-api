@@ -26,3 +26,8 @@ def create_a_blog(blog: schema.CreateBlog, db:Session = Depends(get_db)):
             crud.add_tag(db, blog_id=new_blog.id, tag=tag)
 
     return JSONResponse(status_code=201, content={"message": "Blog created successfully"})
+
+@app.put("/{blog_id}")
+def update_a_blog(blog_id: int, blog: schema.UpdateBlog, db:Session = Depends(get_db)):
+    updated_blog = crud.update_blog(db, blog_id, blog.title, blog.content, blog.category)
+    return updated_blog
