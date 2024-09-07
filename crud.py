@@ -51,7 +51,7 @@ def update_or_delete_tags(db: Session, blog_id: int, tags: list):
     existings_tags_names = [tag.name for tag in existings_tags]
 
     for tag in existings_tags:
-        if tag.name not in tags:
+        if tag.name not in tags or not tags:
             delete_tag(db, tag.id)
 
     for tag in tags:

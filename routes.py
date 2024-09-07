@@ -11,19 +11,19 @@ app = FastAPI()
 Base.metadata.create_all(bind=engine)
 
 
-@app.get("/", status_code=200)
+@app.get("/posts", status_code=200)
 def get_all_blogs(db: Session = Depends(get_db), field: str | None = None, value=None):
     if field and value:
         return crud.search_blogs(db, field, value)
     return crud.get_all_blogs(db)
 
 
-@app.get("/{blog_id}", status_code=200)
+@app.get("/posts/{blog_id}", status_code=200)
 def get_blog(blog_id: int, db: Session = Depends(get_db)):
     return crud.get_by_id(db, blog_id)
 
 
-@app.post("/", response_model=schema.BlogResponse, status_code=200)
+@app.post("/posts", response_model=schema.BlogResponse, status_code=200)
 def create_a_blog(blog: schema.CreateBlog, db: Session = Depends(get_db)):
     new_blog = crud.add_blog(db, blog.title, blog.content, blog.category)
     if blog.tags:
@@ -35,7 +35,7 @@ def create_a_blog(blog: schema.CreateBlog, db: Session = Depends(get_db)):
     )
 
 
-@app.put("/{blog_id}")
+@app.put("/posts/{blog_id}")
 def update_a_blog(blog_id: int, blog: schema.UpdateBlog, db: Session = Depends(get_db)):
     updated_blog = crud.update_blog(
         db, blog_id, blog.title, blog.content, blog.category
@@ -48,7 +48,7 @@ def update_a_blog(blog_id: int, blog: schema.UpdateBlog, db: Session = Depends(g
     return JSONResponse(content={"message": "Blog not updated"})
 
 
-@app.delete("/{blog_id}")
+@app.delete("/posts/{blog_id}")
 def delete_a_blog(blog_id: int, db: Session = Depends(get_db)):
     deleted = crud.delete_blog(db, blog_id)
     if deleted:
