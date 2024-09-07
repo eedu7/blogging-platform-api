@@ -31,15 +31,17 @@ def get_all_blogs(db: Session):
 
 def get_by_id(db: Session, blog_id: int):
     blog = db.query(Blog).filter(Blog.id == blog_id).first()
-    return {
-        "id": blog.id,
-        "title": blog.title,
-        "content": blog.content,
-        "category": blog.category,
-        "tags": get_tag_by_blog_id(db, blog.id),
-        "created_at": blog.created_at,
-        "updated_at": blog.updated_at,
-    }
+    if blog:
+        return {
+            "id": blog.id,
+            "title": blog.title,
+            "content": blog.content,
+            "category": blog.category,
+            "tags": get_tag_by_blog_id(db, blog.id),
+            "created_at": blog.created_at,
+            "updated_at": blog.updated_at,
+        }
+    return {}
 
 
 def get_all_tags(db: Session, blog_id: int):
