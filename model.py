@@ -1,5 +1,6 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Text
-from sqlalchemy.orm import relationship
+from datetime import datetime
+
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 
 from db import Base
 
@@ -11,6 +12,8 @@ class Blog(Base):
     title = Column(String)
     category = Column(String)
     content = Column(Text)
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, onupdate=datetime.now)
 
 
 class Tag(Base):
@@ -19,3 +22,5 @@ class Tag(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
     blog_id = Column(Integer, ForeignKey("blog.id"))
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, onupdate=datetime.now)

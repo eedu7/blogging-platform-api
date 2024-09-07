@@ -12,7 +12,9 @@ Base.metadata.create_all(bind=engine)
 
 
 @app.get("/", status_code=200)
-def get_all_blogs(db: Session = Depends(get_db)):
+def get_all_blogs(db: Session = Depends(get_db), field: str | None = None, value=None):
+    if field and value:
+        return crud.search_blogs(db, field, value)
     return crud.get_all_blogs(db)
 
 

@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from model import Blog, Tag
@@ -21,6 +22,8 @@ def get_all_blogs(db: Session):
             "content": blog.content,
             "category": blog.category,
             "tags": get_tag_by_blog_id(db, blog.id),
+            "created_at": blog.created_at,
+            "updated_at": blog.updated_at,
         }
         new_data.append(data)
     return new_data
@@ -34,6 +37,8 @@ def get_by_id(db: Session, blog_id: int):
         "content": blog.content,
         "category": blog.category,
         "tags": get_tag_by_blog_id(db, blog.id),
+        "created_at": blog.created_at,
+        "updated_at": blog.updated_at,
     }
 
 
@@ -136,3 +141,21 @@ def delete_tags(db: Session, blog_id: int):
         return True
     except Exception:
         return False
+
+
+def search_blogs(db: Session, field: str, value):
+    query = select(Blog).where(getattr(Blog, field) == value)
+    blogs = db.execute(query).scalars().all()
+    new_data = []
+    for blog in blogs:
+        data = {
+            "id": blog.id,
+            "title": blog.title,
+            "content": blog.content,
+            "category": blog.category,
+            "tags": get_tag_by_blog_id(db, blog.id),
+            "created_at": blog.created_at,
+            "updated_at": blog.updated_at,
+        }
+        new_data.append(data)
+    return new_data
