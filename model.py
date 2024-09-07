@@ -1,9 +1,11 @@
-from sqlalchemy import String, Text, Integer, Column, ForeignKey
+from sqlalchemy import Column, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
+
 from db import Base
 
+
 class Blog(Base):
-    __tablename__ = 'blog'
+    __tablename__ = "blog"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String)
@@ -12,8 +14,8 @@ class Blog(Base):
 
 
 class Tag(Base):
-    __tablename__ = 'tags'
+    __tablename__ = "tags"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
-    blog_id = Column(Integer, ForeignKey('blog.id'))
+    blog_id = Column(Integer, ForeignKey("blog.id"))
