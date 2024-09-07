@@ -1,21 +1,19 @@
-from sqlalchemy.engine import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import String, Text, Integer, Column, ForeignKey
+from sqlalchemy.orm import relationship
+from db import Base
 
-SQLITE_DATABASE_URL: str = "sqlite:///test.db"
-engine = create_engine(SQLITE_DATABASE_URL, connect_args={"check_same_thread": False})
+class Blog(Base):
+    __tablename__ = 'blog'
 
-SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
-
-Base = declarative_base()
-
-# Creating the database
-Base.metadata.create_all(bind=engine)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String)
+    category = Column(String)
+    content = Column(Text)
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+class Tag(Base):
+    __tablename__ = 'tags'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String)
+    blog_id = Column(Integer, ForeignKey('blog.id'))
